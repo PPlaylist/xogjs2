@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>XO_GJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Font Awesome 아이콘 사용을 위한 jsDelivr CDN 링크 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Kablammo&family=Noto+Sans+KR:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: url('./img/winter.gif') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Noto Sans KR', sans-serif; /* 기본 폰트 설정 */
+            transition: background 0.3s ease;
+        }
+
+        /* 폴더 스타일 */
+        .folder {
+            width: 70px;
+            height: 70px;
+            background: url('./img/folder_icon.png') no-repeat center center;
+            background-size: contain;
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out; /* 확대 시 부드러운 애니메이션 */
+        }
+        
+        .folder:hover {
+            transform: scale(1.1); /* 마우스를 올렸을 때 살짝 확대 */
+        }
+        
+        /* 창 스타일 */
+        .window {
+            display: none;
+            position: absolute;
+            width: 43%;
+            height: 40%;
+            background: url('./img/folder_op.png') no-repeat center center;
+            background-size: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .window .content {
+            margin: 20px;
+            color: white;
+            font-size: 16px;
+            overflow-y: auto;
+            height: 85%;
+        }
+
+        /* 창 상단 버튼들 */
+        .window-buttons {
+            position: absolute;
+            top: 2px;
+            left: 3.5px;
+            display: flex;
+            gap: 5px; /* 버튼 간격 조정 */
+        }
+
+        /* 개별 버튼 스타일 */
+        .red-btn, .yellow-btn, .green-btn {
+            width: 12px; /* 버튼 크기 증가 */
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .red-btn {
+            background-color: rgb(236,105,94); /* 빨간색 */
+        }
+
+        .yellow-btn {
+            background-color: rgb(243,189,79); /* 노란색 */
+        }
+
+        .green-btn {
+            background-color: rgb(97,196,84); /* 초록색 */
+        }
+
+        .red-btn:hover, .yellow-btn:hover, .green-btn:hover {
+            opacity: 0.6; /* 마우스 오버 시 투명도 변경 */
+        }
+
+        /* 계절 버튼 스타일 */
+        .season-buttons {
+            position: fixed;
+            top: 20px; /* 상단에서 20px 위치 */
+            right: 20px; /* 오른쪽에서 20px 위치 */
+            display: flex;
+            gap: 10px;
+        }
+
+        .season-buttons button {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif; /* 특정 폰트 적용 */
+        }
+
+        .season-buttons button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 음악 플레이어 스타일 */
+        .music-container {
+            width: 300px;
+            height: 150px; /* 높이 조정 */
+            background: url('./img/music_icon.png') no-repeat center center;
+            background-size: cover; /* contain에서 cover로 변경 */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            cursor: move;
+            z-index: 1001;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        /* 노래 제목 표시 */
+        .song-title {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: aliceblue;
+            text-align: center;
+            font-family: 'Roboto Condensed', sans-serif; /* 특정 폰트 적용 */
+        }
+
+        /* 재생 컨트롤 */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* 버튼 간격 조정 */
+        }
+
+        .controls .rew, .controls .fwd, .controls .play, .controls .pause {
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, color 0.3s ease;
+            font-family: 'Frank Ruhl Libre', serif; /* 특정 폰트 적용 */
+        }
+
+        .controls .rew:hover, .controls .fwd:hover, .controls .play:hover, .controls .pause:hover {
+            color: #00bfff;
+            transform: scale(1.2);
+        }
+
+        .pause {
+            display: none; /* 초기에는 숨김 */
+        }
+
+        /* Dock 스타일 */
+        .dock {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 50px;
+            background: rgba(241, 242, 243, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .dock-icon {
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .dock-icon:hover {
+            transform: scale(1.2);
+        }
+    </style>
+
+    <!-- jQuery 및 jQuery UI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+    <!-- 드래그 가능한 폴더 -->
+    <div class="folder" id="folder1" style="top: 150px; right: 150px;"></div>
+    <div class="folder" id="folder2" style="top: 150px; right: 300px;"></div>
+
+    <!-- 폴더 클릭 시 열리는 창 -->
+    <div class="window" id="window1" style="top: 150px; left: 400px;">
+        <!-- 창 상단 버튼들 -->
+        <div class="window-buttons">
+            <div class="red-btn closeWindow"></div>
+            <div class="yellow-btn closeWindow"></div>
+            <div class="green-btn closeWindow"></div>
+        </div>
+        <div class="content">
+            <ul>
+                <li><a href="example.pdf" target="_blank">Example PDF</a></li>
+                <li><a href="example.html" target="_blank">Example HTML File</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="window" id="window2" style="top: 170px; left: 400px;">
+        <!-- 창 상단 버튼들 -->
+        <div class="window-buttons">
+            <div class="red-btn closeWindow"></div>
+            <div class="yellow-btn closeWindow"></div>
+            <div class="green-btn closeWindow"></div>
+        </div>
+        <div class="content">
+            <ul>
+                <li><a href="cv.pdf" target="_blank">cv PDF</a></li>
+                <li><a href="sample.html" target="_blank">Sample HTML File</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 계절 변경 버튼 -->
+    <div class="season-buttons">
+        <button id="springBtn">🌼</button>
+        <button id="summerBtn">🌊</button>
+        <button id="autumnBtn">🍂</button>
+        <button id="winterBtn">❄️</button>
+    </div>
+
+    <!-- 음악 플레이어 -->
+    <div class="music-container" id="musicPlayer">
+        <!-- 노래 제목 표시 -->
+        <div class="song-title" id="songTitle">노래 제목 없음</div>
+        <div class="controls">
+            <div class="rew" id="prevBtn">
+                <i class="fas fa-backward"></i>
+            </div>
+            <div class="play" id="playBtn">
+                <i class="fas fa-play"></i>
+            </div>
+            <div class="pause" id="pauseBtn">
+                <i class="fas fa-pause"></i>
+            </div>
+            <div class="fwd" id="nextBtn">
+                <i class="fas fa-forward"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dock -->
+    <div class="dock">
+        <div class="dock-icon" style="background-image: url('./termianl2.png');" title="VSCode"></div>
+        <div class="dock-icon" style="background-image: url('./wether.jpeg');" title="Weather"></div>
+        <div class="dock-icon" style="background-image: url('./icon3.png');" title="Icon 3"></div>
+        <div class="dock-icon" style="background-image: url('./icon4.png');" title="Icon 4"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        $(function () {
+            const clickSound = new Audio('mixkit-cool-interface-click-tone-2568.wav');
+
+            // 플레이리스트 배열 (노래 제목과 파일 경로)
+            const playlist = [
+                { title: "OI - 외동아들 김승기", src: "./music/OI.mp4" }, // .mp3 형식으로 변경 권장
+                { title: "노래 2", src: "./music/song2.mp3" },
+                { title: "노래 3", src: "./music/song3.mp3" },
+                // 추가 노래를 여기에 추가하세요
+            ];
+
+            let currentSongIndex = 0;
+            const audio = new Audio();
+
+            // 초기 노래 로드
+            function loadSong(index) {
+                if (index >= 0 && index < playlist.length) {
+                    audio.src = playlist[index].src;
+                    $('#songTitle').text(playlist[index].title);
+                }
+            }
+
+            loadSong(currentSongIndex);
+
+            // 드래그 가능한 요소
+            $(".folder, #musicPlayer").draggable({ containment: "window" });
+            $(".window").draggable({ containment: "window" });
+
+            // 클릭 시 소리 재생
+            $(".folder, .closeWindow, .season-buttons button, #playBtn, #pauseBtn, .rew, .fwd").on("click", function () {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            });
+
+            // 폴더 클릭 시 창 열기
+            $("#folder1").click(() => $("#window1").fadeIn());
+            $("#folder2").click(() => $("#window2").fadeIn());
+
+            // 닫기 버튼 (모든 색상 버튼이 닫기 동작)
+            $(".closeWindow").click(function () {
+                $(this).closest('.window').fadeOut();
+            });
+
+            // 계절별 배경 GIF 변경
+            const seasonBackgrounds = {
+                spring: './img/spring.gif',
+                summer: './img/summer.gif',
+                autumn: './img/autumn.gif',
+                winter: './img/winter.gif'
+            };
+
+            $("#springBtn").click(() => changeBackground(seasonBackgrounds.spring));
+            $("#summerBtn").click(() => changeBackground(seasonBackgrounds.summer));
+            $("#autumnBtn").click(() => changeBackground(seasonBackgrounds.autumn));
+            $("#winterBtn").click(() => changeBackground(seasonBackgrounds.winter));
+
+            function changeBackground(gif) {
+                $("body").css("background", `url(${gif}) no-repeat center center fixed`);
+                $("body").css("background-size", "cover");
+            }
+
+            // 음악 플레이어 기능 (새로운 버튼 적용)
+            $("#playBtn").click(function () {
+                audio.play();
+                $("#playBtn").hide();
+                $("#pauseBtn").show();
+            });
+
+            $("#pauseBtn").click(function () {
+                audio.pause();
+                $("#pauseBtn").hide();
+                $("#playBtn").show();
+            });
+
+            // 앞뒤 이동(rew/fwd) 버튼 기능 구현
+            $("#prevBtn").click(function() {
+                currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+                loadSong(currentSongIndex);
+                audio.play();
+                $("#playBtn").hide();
+                $("#pauseBtn").show();
+            });
+
+            $("#nextBtn").click(function() {
+                currentSongIndex = (currentSongIndex + 1) % playlist.length;
+                loadSong(currentSongIndex);
+                audio.play();
+                $("#playBtn").hide();
+                $("#pauseBtn").show();
+            });
+
+            // 노래가 끝났을 때 자동으로 다음 노래로 이동
+            audio.addEventListener('ended', function() {
+                $("#nextBtn").click();
+            });
+        });
+    </script>
+</body>
+</html>
