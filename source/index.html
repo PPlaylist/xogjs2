@@ -16,7 +16,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: url('./img/winter.gif') no-repeat center center fixed;
+            background: url('./img/bk/winter.gif') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Noto Sans KR', sans-serif; /* 기본 폰트 설정 */
             transition: background 0.3s ease;
@@ -26,7 +26,7 @@
         .folder {
             width: 70px;
             height: 70px;
-            background: url('./img/folder_icon.png') no-repeat center center;
+            background: url('./img/icon/folder_icon.png') no-repeat center center;
             background-size: contain;
             position: absolute;
             cursor: pointer;
@@ -43,7 +43,7 @@
             position: absolute;
             width: 43%;
             height: 40%;
-            background: url('./img/folder_op.png') no-repeat center center;
+            background: url('./img/icon/folder_op.png') no-repeat center center;
             background-size: cover;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -94,7 +94,7 @@
         /* 계절 버튼 스타일 */
         .season-buttons {
             position: fixed;
-            top: 20px; /* 상단에서 20px 위치 */
+            top: 30px; /* 상단에서 30px 위치 */
             right: 20px; /* 오른쪽에서 20px 위치 */
             display: flex;
             gap: 10px;
@@ -120,7 +120,7 @@
         .music-container {
             width: 300px;
             height: 150px; /* 높이 조정 */
-            background: url('./img/music_icon.png') no-repeat center center;
+            background: url('./img/icon/music_icon.png') no-repeat center center;
             background-size: cover; /* contain에서 cover로 변경 */
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -175,8 +175,8 @@
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            height: 50px;
-            background: rgba(241, 242, 243, 0.5);
+            height: 55px;
+            background: rgba(241, 242, 243, 0.3);
             border-radius: 20px;
             backdrop-filter: blur(10px);
             display: flex;
@@ -187,9 +187,15 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .dock-icon {
+        .dock a {
+            display: inline-block; /* <a> 태그를 블록 요소로 설정 */
             width: 50px;
             height: 50px;
+        }
+
+        .dock-icon {
+            width: 100%;
+            height: 100%;
             background-size: contain;
             background-repeat: no-repeat;
             transition: transform 0.2s ease-in-out;
@@ -198,6 +204,38 @@
 
         .dock-icon:hover {
             transform: scale(1.2);
+        }
+
+        /* 날씨 위젯 컨테이너 스타일 */
+        .weather-container {
+            width: 300px;
+            padding: 15px;
+            background: rgba(32,39,45);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 220px; /* 음악 플레이어 아래에 배치 */
+            left: 50px;
+            cursor: move;
+            z-index: 1001;
+            color: white;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* MacOS 스타일 추가 */
+        .weather-container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
         }
     </style>
 
@@ -269,24 +307,90 @@
         </div>
     </div>
 
-    <!-- Dock -->
-    <div class="dock">
-        <div class="dock-icon" style="background-image: url('./termianl2.png');" title="VSCode"></div>
-        <div class="dock-icon" style="background-image: url('./wether.jpeg');" title="Weather"></div>
-        <div class="dock-icon" style="background-image: url('./icon3.png');" title="Icon 3"></div>
-        <div class="dock-icon" style="background-image: url('./icon4.png');" title="Icon 4"></div>
+    <!-- 날씨 위젯 -->
+    <div class="weather-container" id="weatherWidget">
+        <div id="ww_d9425a2395c02" v='1.3' loc='auto' a='{"t":"horizontal","lang":"ko","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722","el_phw":3}'>
+            Weather Data Source: 
+            <a href="https://wetterlang.de/wetter_21_tage/" id="ww_d9425a2395c02_u" target="_blank">Wetterlang.de</a>
+        </div>
+        <script async src="https://app3.weatherwidget.org/js/?id=ww_d9425a2395c02"></script>
     </div>
 
+    <!-- Dock -->
+    <div class="dock">
+        <a href="https://www.apple.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/finder.png');" title="Finder"></div>
+        </a>
+        <a href="https://namu.wiki/w/런천미트" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/luchpad.png');" title="Launchpad"></div>
+        </a>
+        <a href="https://www.apple.com/safari/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/safari.png');" title="Safari"></div>
+        </a>
+        <a href="https://music.youtube.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/youtube.png');" title="YouTube"></div>
+        </a>
+        <a href="http://www.djbusterminal.co.kr" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/termianl.png');" title="VSCode"></div>
+        </a>
+        <a href="https://www.apple.com/app-store/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/appstore.png');" title="App Store"></div>
+        </a>
+        <a href="https://blog.naver.com/bestibelly/222959537261?trackingCode=rss" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/message.png');" title="Messages"></div>
+        </a>
+        <a href="https://code.visualstudio.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/vscode.png');" title="Mirror"></div>
+        </a>
+        <a href="https://www.google.com/chrome/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/chrome.png');" title="Chrome"></div>
+        </a>
+        <a href="https://www.docker.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/docker.png');" title="Docker"></div>
+        </a>
+        <a href="https://www.instagram.com/sjg.ox/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/instagram.png');" title="Instagram"></div>
+        </a>
+        <a href="https://www.kakao.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/kakao.png');" title="KakaoTalk"></div>
+        </a>
+        <a href="https://maps.google.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/map.png');" title="Google Maps"></div>
+        </a>
+        <a href="https://music.apple.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/music.png');" title="Music"></div>
+        </a>
+        <a href="https://www.notion.so/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/notion.png');" title="Notion"></div>
+        </a>
+        <a href="https://namu.wiki/w/설정" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/setting.png');" title="Settings"></div>
+        </a>
+        <a href="https://calendar.naver.com/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/transport.png');" title="Transport"></div>
+        </a>
+        <a href="https://www.weather.go.kr/w" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/wether.png');" title="Weather"></div>
+        </a>
+        <a href="https://typora.io/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/typora.png');" title="Typora"></div>
+        </a>
+        <a href="https://www.apple.com/kr/iphone/" target="_blank">
+            <div class="dock-icon" style="background-image: url('./img/dock/mirror.png');" title="Mirror"></div>
+        </a>
+    </div>
+    
     <!-- JavaScript -->
     <script>
         $(function () {
-            const clickSound = new Audio('mixkit-cool-interface-click-tone-2568.wav');
+            const clickSound = new Audio('./click.wav');
 
             // 플레이리스트 배열 (노래 제목과 파일 경로)
             const playlist = [
-                { title: "OI - 외동아들 김승기", src: "./music/OI.mp4" }, // .mp3 형식으로 변경 권장
-                { title: "노래 2", src: "./music/song2.mp3" },
-                { title: "노래 3", src: "./music/song3.mp3" },
+                { title: "OI -  김승기", src: "./music/OI.mp3" }, 
+                { title: "5050 - 김승기", src: "./music/5050.mp3" },
+                { title: "Black Heart - 릴러말즈", src: "./music/Black Heart.mp3" },
+                { title: "Maybe Man - AJR", src: "./music/Maybe Man.mp3" },
                 // 추가 노래를 여기에 추가하세요
             ];
 
@@ -304,7 +408,7 @@
             loadSong(currentSongIndex);
 
             // 드래그 가능한 요소
-            $(".folder, #musicPlayer").draggable({ containment: "window" });
+            $(".folder, #musicPlayer, #weatherWidget").draggable({ containment: "window" });
             $(".window").draggable({ containment: "window" });
 
             // 클릭 시 소리 재생
@@ -324,10 +428,10 @@
 
             // 계절별 배경 GIF 변경
             const seasonBackgrounds = {
-                spring: './img/spring.gif',
-                summer: './img/summer.gif',
-                autumn: './img/autumn.gif',
-                winter: './img/winter.gif'
+                spring: './img/bk/spring.gif',
+                summer: './img/bk/summer.gif',
+                autumn: './img/bk/autumn.gif',
+                winter: './img/bk/winter.gif'
             };
 
             $("#springBtn").click(() => changeBackground(seasonBackgrounds.spring));
