@@ -210,7 +210,7 @@
         .weather-container {
             width: 300px;
             padding: 15px;
-            background: rgba(32,39,45);
+            background: rgb(0, 0, 0);
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             display: flex;
@@ -309,12 +309,16 @@
 
     <!-- 날씨 위젯 -->
     <div class="weather-container" id="weatherWidget">
-        <div id="ww_d9425a2395c02" v='1.3' loc='auto' a='{"t":"horizontal","lang":"ko","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722","el_phw":3}'>
-            Weather Data Source: 
-            <a href="https://wetterlang.de/wetter_21_tage/" id="ww_d9425a2395c02_u" target="_blank">Wetterlang.de</a>
+        <div id="ww_30c58669de72e" v='1.3' loc='id' 
+             a='{"t":"horizontal","lang":"ko","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius",
+             "cl_bkg":"#000000","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107",
+             "cl_moon":"#FFC107","cl_thund":"#FF5722"}'>
+            More forecasts: <a href="https://oneweather.org/seoul/30_days/" id="ww_30c58669de72e_u" target="_blank">Seoul weather forecast 30 days</a>
         </div>
-        <script async src="https://app3.weatherwidget.org/js/?id=ww_d9425a2395c02"></script>
+        <script async src="https://app3.weatherwidget.org/js/?id=ww_30c58669de72e"></script>
     </div>
+
+
 
     <!-- Dock -->
     <div class="dock">
@@ -387,8 +391,8 @@
 
             // 플레이리스트 배열 (노래 제목과 파일 경로)
             const playlist = [
-                { title: "OI -  김승기", src: "./music/Oi.mp3" }, 
-                { title: "5050 - 김승기", src: "./music/5050.mp3" },
+                { title: "OI -  김승기", src: "./music/OI.mp3" }, 
+                { title: "5050 - 김승기", src: "/Users/xogjs/Downloads/mmain/music/5050.mp3" },
                 { title: "Black Heart - 릴러말즈", src: "./music/Black Heart.mp3" },
                 { title: "Maybe Man - AJR", src: "./music/Maybe Man.mp3" },
                 // 추가 노래를 여기에 추가하세요
